@@ -1,3 +1,9 @@
 .ipynb_checkpoints
 KT session with PwC.vtt
 temp_output.pdf
+infra/.terraform.lock.hcl
+infra/.terraform/
+app/app-streamlit/
+app/__pycache__/
+app/app-streamlit/*/*
+app/.streamlit/secrets.toml
