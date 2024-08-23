@@ -14,6 +14,10 @@ This application aims at providing a Google Translate like application for enter
 
 - Translate PDF documents (EN to FR)
 
+### Version 0.3
+
+- Made UI nicer
+
 ## References
 
 - [Translating Text (Advanced)](https://cloud.google.com/translate/docs/advanced/translating-text-v3)
