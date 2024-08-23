@@ -41,6 +41,11 @@ top_container_css = """
     background-position: center;  
     background-repeat: no-repeat;
 }
+header[data-testid="stHeader"] {
+  background-color: transparent !important; 
+  opacity: 0.5; /* Adjust this value as needed */
+  color: black;
+}
 </style>
 """
 
