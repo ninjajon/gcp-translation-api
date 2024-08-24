@@ -29,7 +29,6 @@ with st.sidebar:
     st.markdown("Source Code: https://github.com/ninjajon/gcp-translation-api")
 
 top_container = st.container(height=400, border=False)
-#top_container.markdown("Trainslator", unsafe_allow_html=True)
 top_container.markdown("<h1 style='text-align: left; font-size: 5em;'>Trainslator</h1>", unsafe_allow_html=True)
 
 # Set the background image
@@ -56,39 +55,6 @@ with bottom_container:
     source_language_code = "en"
     target_language_code = "fr"
     input_column, middle_column, output_column = st.columns([0.45, 0.1, 0.45], gap="small", vertical_alignment="top")
-    input_container_css = '''
-    <style>
-        [data-testid='stFileUploader'] {
-            width: max-content;
-        }
-        [data-testid='stFileUploader'] section {
-            padding: 0;
-            float: left;
-        }
-        [data-testid='stFileUploader'] section > input + div {
-            display: none;
-        }
-        [data-testid='stFileUploader'] section + div {
-            float: right;
-            padding-top: 0;
-        }
-        [data-testid='stFileUploader'] section + div {
-            background-color: white;
-            border-radius: 10px; /* Adjust the value to control the roundness */
-        }
-        [data-testid="stWidgetLabel"] {
-            display: none !important;
-        }
-    </style>
-    '''
-
-    input_container_css2 = '''
-    <style>
-        [data-testid='stFileUploader'] section + div {
-            background-color: rgb(240, 242, 246);
-        }
-    </style>
-    '''
 
     input_container_css3 = '''
     <style>
@@ -123,7 +89,7 @@ with bottom_container:
         input_container = st.container(border=False)
         text_input = input_container.text_area("", placeholder="Type or your text here or upload a file")
         uploaded_file = input_container.file_uploader("", type=["pdf","docx", "pptx"], help=None)
-        input_container.markdown(input_container_css3, unsafe_allow_html=True)
+        input_container.markdown(input_container_css, unsafe_allow_html=True)
 
     with middle_column:
         button_pressed = ""
