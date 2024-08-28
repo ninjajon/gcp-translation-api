@@ -56,7 +56,7 @@ with bottom_container:
     target_language_code = "fr"
     input_column, middle_column, output_column = st.columns([0.45, 0.1, 0.45], gap="small", vertical_alignment="top")
 
-    input_container_css3 = '''
+    input_container_css = '''
     <style>
         div.stFileUploaderFile.st-emotion-cache-12xsiil.e1b2p2ww5 {
             background-color: rgb(240, 242, 246);
