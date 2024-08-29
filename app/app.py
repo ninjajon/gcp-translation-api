@@ -87,14 +87,17 @@ with bottom_container:
 
     with input_column:
         input_container = st.container(border=False)
-        text_input = input_container.text_area("", placeholder="Type or your text here or upload a file")
-        uploaded_file = input_container.file_uploader("", type=["pdf","docx", "pptx"], help=None)
+        text_input = input_container.text_area(".", placeholder="Type or your text here or upload a file")
+        uploaded_file = input_container.file_uploader(".", type=["pdf","docx", "pptx"], help=None)
         input_container.markdown(input_container_css, unsafe_allow_html=True)
 
     with middle_column:
         button_pressed = ""
         if st.button("Translate", type="secondary"):
             button_pressed = True
+        col1, col2 =st.columns([.3,.7], gap="small", vertical_alignment="center")
+        use_glossary = col1.toggle("Use Glossary")
+        col2.caption(":red[Use Glossary]")
 
     with output_column:
         output_container = st.container(border=False)
@@ -111,7 +114,8 @@ with bottom_container:
                         source_language_code, 
                         target_language_code,
                         st.secrets["project_id"], 
-                        st.secrets["location"]
+                        st.secrets["location"],
+                        use_glossary
                     )
                     if uploaded_file is not None:
                         # Store the translated document in a temporary file
@@ -127,4 +131,4 @@ with bottom_container:
                                 mime="application/pdf"
                             )
                     else:
-                        output_container.text_area("", output)
+                        output_container.text_area(".", output)

@@ -1,6 +1,16 @@
 from google.cloud import translate_v3 as translate
 from google.cloud import storage
 
+bucket_name = "jo-trainslator-antl"
+folder_name = "glossary"
+file_name = "glossary.csv"
+project_id = "jo-trainslator-antl"
+input_uri = f"gs://{bucket_name}/{folder_name}/{file_name}"
+glossary_id = "trainslator-glossary"
+
+from google.cloud import translate_v3 as translate
+from google.cloud import storage
+
 def create_bucket(bucket_name):
     try:
         storage_client = storage.Client()
@@ -56,4 +66,6 @@ def create_glossary(
 
     return result
 
-
+create_bucket(bucket_name)
+upload_glossary(bucket_name, folder_name, file_name)
+create_glossary(project_id, input_uri, glossary_id)
