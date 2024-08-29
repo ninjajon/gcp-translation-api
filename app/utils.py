@@ -1,47 +1,60 @@
-import os
-import json
 from google.cloud import translate
-from google.cloud import translate_v3
 import logging
+import streamlit as st
 
 logging.basicConfig(level=logging.INFO)
 
-def route_input(request_id, text_input, uploaded_file, source_language_code, target_language_code, project_id, location):
+def route_input(request_id, text_input, uploaded_file, source_language_code, target_language_code, project_id, location, use_glossary):
     logging.info(f"{request_id} - Request ID: {request_id}")
     logging.info(f"{request_id} - New Input: {text_input}")
     if uploaded_file is not None:
         logging.info(f"{request_id} - Uploaded File Type: {uploaded_file.type}")
-        output = translate_file(request_id, uploaded_file, source_language_code, target_language_code, project_id, location)
+        output = translate_file(request_id, uploaded_file, source_language_code, target_language_code, project_id, location, use_glossary)
     else:
         logging.info(f"{request_id} - No Uploaded File")
-        output = translate_text(request_id, text_input, source_language_code, target_language_code, project_id, location)
+        output = translate_text(request_id, text_input, source_language_code, target_language_code, project_id, location, use_glossary)
     return output
 
-def translate_text(request_id, text_input, source_language_code, target_language_code, project_id, location
+def translate_text(request_id, text_input, source_language_code, target_language_code, project_id, location, use_glossary
     ) -> translate.TranslationServiceClient:
 
     logging.info(f"{request_id} - Sending text input to Cloud Translate API...")
 
     client = translate.TranslationServiceClient()
-
-    location = "global"
-
     parent = f"projects/{project_id}/locations/{location}"
 
+    if use_glossary:
+        glossary_id = st.secrets["glossary_id"]
+        glossary = client.glossary_path(
+            project_id, "us-central1", glossary_id  # The location of the glossary
+        )
+        glossary_config = translate.TranslateTextGlossaryConfig(glossary=glossary)
+        
+    else:
+        glossary_config = None
+
+    logging.info(f"{request_id} - Glossary: {glossary_config}")
+
     response = client.translate_text(
-        parent= parent,
-        contents= [text_input],
-        mime_type= "text/plain",  # mime types: text/plain, text/html
-        source_language_code= source_language_code,
-        target_language_code= target_language_code
+        request={
+            "contents": [text_input],
+            "source_language_code": source_language_code,
+            "target_language_code": target_language_code,
+            "parent": parent,
+            "glossary_config": glossary_config,
+        }
     )
 
-    translated_text = response.translations[0].translated_text
+    if use_glossary:
+        translated_text = response.glossary_translations[0].translated_text
+    else:     
+        translated_text = response.translations[0].translated_text
+    
     logging.info(f"{request_id} - Translated Text: {translated_text}")
 
     return translated_text
 
-def translate_file(request_id, uploaded_file, source_language_code, target_language_code, project_id, location
+def translate_file(request_id, uploaded_file, source_language_code, target_language_code, project_id, location, use_glossary
 ) -> translate.TranslationServiceClient:
     
     client = translate.TranslationServiceClient()
@@ -62,54 +75,29 @@ def translate_file(request_id, uploaded_file, source_language_code, target_langu
         "mime_type": "application/pdf",
     }
 
+    if use_glossary:
+        glossary_id = st.secrets["glossary_id"]
+        glossary = client.glossary_path(
+            project_id, "us-central1", glossary_id  # The location of the glossary
+        )
+        glossary_config = translate.TranslateTextGlossaryConfig(glossary=glossary)
+
+    else:
+        glossary_config = None
+
+    logging.info(f"{request_id} - Glossary: {glossary_config}")
+
     response = client.translate_document(
         request={
             "parent": parent,
-            "target_language_code": "fr",
+            "target_language_code": target_language_code,
+            "source_language_code": source_language_code,
             "document_input_config": document_input_config,
+            "glossary_config": glossary_config,
         }
     )
 
-    # f = open('/tmp/output', 'wb')
-    # f.write(response.document_translation.byte_stream_outputs[0])
-    # f.close()
-
-    return response.document_translation.byte_stream_outputs[0]
-
-
-    # try:
-    #     if uploaded_file.type in ("image/png", "image/jpeg"):
-    #         bytes_data = uploaded_file.getvalue()
-    #         file_content = Image.from_bytes(bytes_data)
-    #     elif uploaded_file.type in ("application/pdf"):
-    #         bytes_data = uploaded_file.getvalue()
-    #         file_content = Part.from_data(mime_type="application/pdf", data=bytes_data)
-    #     else:
-    #         logging.warning(f"{request_id} - Unknown file type")
-    # except:
-    #     logging.warning(f"{request_id} - Can't read file")
-
-    #     return "Can't read the uploaded file. Try with a different one."
-
-    # system_instruction = set_system_instruction(persona, "file")
-
-    # logging.info(f"{request_id} - Sending prompt to Gemini...")
-    # model = GenerativeModel(
-    #     model_name=model_id,
-    #     system_instruction=[system_instruction]
-    # )
-    # generation_config = {
-    #     "max_output_tokens": 8192,
-    #     "temperature": temperature,
-    #     "top_p": 0.95,
-    # }
-
-    # response = model.generate_content(
-    #     [file_content, question],
-    #     generation_config=generation_config
-    # )
-    # answer = response.text
-
-    # logging.info(f"{request_id} - Response from Gemini is: {answer}")
-
-    # return answer
+    if use_glossary:
+        return response.glossary_document_translation.byte_stream_outputs[0]
+    else:
+        return response.document_translation.byte_stream_outputs[0]

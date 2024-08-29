@@ -7,3 +7,6 @@ app/app-streamlit/
 app/__pycache__/
 app/app-streamlit/*/*
 app/.streamlit/secrets.toml
+glossary/trainslator/bin/python3.11
+glossary/__pycache__/
+glossary/trainslator/
