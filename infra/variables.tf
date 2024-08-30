@@ -11,9 +11,9 @@ variable "region" {
 }
 
 variable "dns_name" {
-  default = "trainslate.ninjajon.com"
+  default = "trainslator.ninjajon.com"
 }
 
 variable "cloud_run_service" {
-    default = "trainslate"
+    default = "trainslator"
 }

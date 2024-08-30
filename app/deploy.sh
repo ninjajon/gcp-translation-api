@@ -9,15 +9,11 @@ gcloud iam service-accounts create "$SERVICE_NAME"
 
 gcloud projects add-iam-policy-binding $GCP_PROJECT \
   --member="serviceAccount:$SERVICE_NAME@$GCP_PROJECT.iam.gserviceaccount.com" \
-  --role="roles/aiplatform.user"
+  --role="roles/cloudtranslate.user"
 
 gcloud projects add-iam-policy-binding $GCP_PROJECT \
   --member="serviceAccount:$SERVICE_NAME@$GCP_PROJECT.iam.gserviceaccount.com" \
   --role="roles/logging.logWriter"
-
-gcloud projects add-iam-policy-binding $GCP_PROJECT \
-  --member="serviceAccount:$SERVICE_NAME@$GCP_PROJECT.iam.gserviceaccount.com" \
-  --role="roles/discoveryengine.editor"
 
 gcloud projects add-iam-policy-binding $GCP_PROJECT \
   --member="serviceAccount:$SERVICE_NAME@$GCP_PROJECT.iam.gserviceaccount.com" \

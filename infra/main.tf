@@ -36,7 +36,9 @@ module "lb" {
       ]
 
       iap_config = {
-        enable               = false
+        enable               = true
+        oauth2_client_id     = "486962734106-hkhtpouo54hl4nvav54cr6htnaoq4f3q.apps.googleusercontent.com"
+        oauth2_client_secret = "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"
       }
 
       security_policy = null
