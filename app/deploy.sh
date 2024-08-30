@@ -31,14 +31,6 @@ gcloud run deploy "$SERVICE_NAME" \
   --platform=managed  \
   --project=$GCP_PROJECT \
   --service-account="$SERVICE_NAME" \
-  --ingress=internal-and-cloud-load-balancing \
-  --set-env-vars="GCP_PROJECT=$GCP_PROJECT, \
-    GCP_REGION=$GCP_REGION, \
-    GCP_SEARCH_LOCATION=$GCP_SEARCH_LOCATION, \
-    BUCKET_NAME=$BUCKET_NAME, \
-    BUCKET_URI=$BUCKET_URI, \
-    SEARCH_ENGINE_NAME=$SEARCH_ENGINE_NAME, \
-    DATASTORE_NAME=$DATASTORE_NAME, \
-    DATASTORE_ID=$DATASTORE_ID"
+  --ingress=internal-and-cloud-load-balancing
 
 

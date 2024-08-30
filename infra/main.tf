@@ -8,6 +8,23 @@ resource "google_compute_region_network_endpoint_group" "default" {
   }
 }
 
+data "google_project" "project" {
+  project_id = var.project
+}
+
+# resource "google_iap_brand" "project_brand" {
+#   support_email     = var.support_email
+#   application_title = title(var.cloud_run_service)
+#   project           = data.google_project.project.number
+# }
+
+# resource "google_iap_client" "project_client" {
+#   display_name = var.cloud_run_service
+#   brand        =  google_iap_brand.project_brand.name
+#   # external users
+
+# }
+
 module "lb" {
   source  = "GoogleCloudPlatform/lb-http/google//modules/serverless_negs"
   version = "~> 11.0"
@@ -37,8 +54,10 @@ module "lb" {
 
       iap_config = {
         enable               = true
-        oauth2_client_id     = "486962734106-hkhtpouo54hl4nvav54cr6htnaoq4f3q.apps.googleusercontent.com"
-        oauth2_client_secret = "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"
+        #oauth2_client_id     = google_iap_client.project_client.client_id
+        #oauth2_client_secret = google_iap_client.project_client.secret
+        oauth2_client_id     = "589130920841-2pgd7agluvjit2rjm0guoa1s3a5fovtk.apps.googleusercontent.com"
+        oauth2_client_secret = "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"
       }
 
       security_policy = null
@@ -53,4 +72,10 @@ resource "google_dns_record_set" "default" {
   managed_zone = "ninjajon-com"
   rrdatas      = [module.lb.external_ip]
   depends_on   = [module.lb]
+}
+
+resource "google_iap_web_iam_binding" "iap_web_user" {
+  project    = var.project
+  role       = "roles/iap.httpsResourceAccessor"  # This is the IAP Web App User role
+  members    = ["group:${var.iap_group_name}"]
 }
