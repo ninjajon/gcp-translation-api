@@ -18,8 +18,6 @@ def route_input(request_id, text_input, uploaded_file, source_language_code, tar
 def translate_text(request_id, text_input, source_language_code, target_language_code, project_id, location, use_glossary
     ) -> translate.TranslationServiceClient:
 
-    logging.info(f"{request_id} - Sending text input to Cloud Translate API...")
-
     client = translate.TranslationServiceClient()
     parent = f"projects/{project_id}/locations/{location}"
 
@@ -35,6 +33,8 @@ def translate_text(request_id, text_input, source_language_code, target_language
 
     logging.info(f"{request_id} - Glossary: {glossary_config}")
 
+    logging.info(f"{request_id} - Sending text input to Cloud Translate API...")
+
     response = client.translate_text(
         request={
             "contents": [text_input],
@@ -47,8 +47,10 @@ def translate_text(request_id, text_input, source_language_code, target_language
 
     if use_glossary:
         translated_text = response.glossary_translations[0].translated_text
+        logging.info(f"{request_id} - Glossary Translation: {translated_text}")
     else:     
         translated_text = response.translations[0].translated_text
+        logging.info(f"{request_id} - Translation: {translated_text}")
     
     logging.info(f"{request_id} - Translated Text: {translated_text}")
 
