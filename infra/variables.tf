@@ -11,9 +11,17 @@ variable "region" {
 }
 
 variable "dns_name" {
-  default = "trainslate.ninjajon.com"
+  default = "trainslator.ninjajon.com"
 }
 
 variable "cloud_run_service" {
-    default = "trainslate"
+    default = "trainslator"
+}
+
+variable "support_email" {
+  default = "jolefebvre@jolefebvre.altostrat.com"
+}
+
+variable "iap_group_name" {
+  default = "genaidemousers@jolefebvre.altostrat.com"
 }

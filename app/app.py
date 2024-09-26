@@ -16,7 +16,7 @@ st.set_page_config(
 )
 
 with st.sidebar:
-    st.title("Trainslator v0.3")
+    st.title("Trainslator v0.4")
     st.markdown("Trainslator is a corporate, private and secure translator")
     st.write("\n")
     st.markdown("""
@@ -24,6 +24,7 @@ with st.sidebar:
      - Version 0.1 - Translate text from typed input (EN to FR)
      - Version 0.2 - Translate PDF documents (EN to FR)  
      - Version 0.3 - Make UI nicer     
+     - Version 0.4 - Add glossary option 
                 """)
     st.markdown("Built with Google Cloud Translate API")
     st.markdown("Source Code: https://github.com/ninjajon/gcp-translation-api")
