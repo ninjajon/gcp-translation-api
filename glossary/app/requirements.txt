@@ -1,0 +1,5 @@
+streamlit
+google.cloud.logging
+google-cloud-translate
+st-files-connection
+gcsfs

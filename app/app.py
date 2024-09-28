@@ -16,7 +16,7 @@ st.set_page_config(
 )
 
 with st.sidebar:
-    st.title("Trainslator v0.4")
+    st.title("Trainslator v0.5")
     st.markdown("Trainslator is a corporate, private and secure translator")
     st.write("\n")
     st.markdown("""
@@ -25,6 +25,7 @@ with st.sidebar:
      - Version 0.2 - Translate PDF documents (EN to FR)  
      - Version 0.3 - Make UI nicer     
      - Version 0.4 - Add glossary option 
+     - Version 0.5 - Improve glossary look 
                 """)
     st.markdown("Built with Google Cloud Translate API")
     st.markdown("Source Code: https://github.com/ninjajon/gcp-translation-api")
@@ -94,11 +95,19 @@ with bottom_container:
 
     with middle_column:
         button_pressed = ""
+        use_glossary = False
         if st.button("Translate", type="secondary"):
             button_pressed = True
-        col1, col2 =st.columns([.3,.7], gap="small", vertical_alignment="center")
-        use_glossary = col1.toggle("Use Glossary")
-        col2.caption(":red[Use Glossary]")
+        if st.button("Trainslate", type="primary"):
+            use_glossary = True
+            button_pressed = True
+        if st.button("Show Glossary"):
+            st.switch_page("pages/glossary.py")
+        with st.expander("Show Glossary"):
+            st.text("this is the glossary")
+        #col1, col2 =st.columns([.3,.7], gap="small", vertical_alignment="center")
+        #use_glossary = col1.toggle("Use Glossary")
+        #col2.caption(":red[Use Glossary]")
 
     with output_column:
         output_container = st.container(border=False)

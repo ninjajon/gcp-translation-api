@@ -10,3 +10,7 @@ app/.streamlit/secrets.toml
 glossary/trainslator/bin/python3.11
 glossary/__pycache__/
 glossary/trainslator/
+glossary/app/app-streamlit/
+glossary/app/__pycache__/
+glossary/app/app-streamlit/*/*
+glossary/app/.streamlit/secrets.toml
