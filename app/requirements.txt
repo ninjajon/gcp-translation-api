@@ -1,3 +1,5 @@
 streamlit
 google.cloud.logging
 google-cloud-translate
+gcsfs
+st_files_connection
