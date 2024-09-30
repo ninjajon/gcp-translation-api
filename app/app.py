@@ -26,6 +26,7 @@ with st.sidebar:
      - Version 0.3 - Make UI nicer     
      - Version 0.4 - Add glossary option 
      - Version 0.5 - Improve glossary look 
+     - Version 0.6 - FR to EN translation
                 """)
     st.markdown("Built with Google Cloud Translate API")
     st.markdown("Source Code: https://github.com/ninjajon/gcp-translation-api")
@@ -84,10 +85,16 @@ with bottom_container:
         [data-testid="stWidgetLabel"] {
             display: none !important;
         }
+    div.row-widget.stRadio > div[role="radiogroup"] > label[data-baseweb="radio"] {
+        background-color: #f0f0f0; 
+        padding-left: 5px; /* Add left padding */
+        padding-right: 5px; /* Add right padding */
+    }
     </style>
     '''
 
     with input_column:
+        input_language = st.selectbox("input_language",("English", "French"))
         input_container = st.container(border=False)
         text_input = input_container.text_area(".", placeholder="Type or your text here or upload a file")
         uploaded_file = input_container.file_uploader(".", type=["pdf","docx", "pptx"], help=None)
@@ -104,6 +111,14 @@ with bottom_container:
         st.link_button("See Glossary", "glossary")
 
     with output_column:
+        if input_language == "English":
+            output_language = st.selectbox("output_language",("French", "English"), disabled=True)
+            source_language_code = "en"
+            target_language_code = "fr"
+        else:
+            output_language = st.selectbox("output_language",("English", "French"), disabled=True)
+            source_language_code = "fr"
+            target_language_code = "en"
         output_container = st.container(border=False)
         if button_pressed:
             if text_input == "" and uploaded_file is None:

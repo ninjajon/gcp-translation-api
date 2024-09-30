@@ -22,6 +22,14 @@ This application aims at providing a Google Translate like application for enter
 
 - Add glossary option
 
+### Version 0.5
+
+- Improve glossary look
+
+### Version 0.6
+
+- FR to EN translation
+
 ## Build and deploy
 
 ### Create Glossary
