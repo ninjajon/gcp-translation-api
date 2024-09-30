@@ -101,13 +101,7 @@ with bottom_container:
         if st.button("Trainslate", type="primary"):
             use_glossary = True
             button_pressed = True
-        if st.button("Show Glossary"):
-            st.switch_page("pages/glossary.py")
-        with st.expander("Show Glossary"):
-            st.text("this is the glossary")
-        #col1, col2 =st.columns([.3,.7], gap="small", vertical_alignment="center")
-        #use_glossary = col1.toggle("Use Glossary")
-        #col2.caption(":red[Use Glossary]")
+        st.link_button("See Glossary", "glossary")
 
     with output_column:
         output_container = st.container(border=False)

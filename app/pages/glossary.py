@@ -7,7 +7,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 st.set_page_config(
-    page_title="Trainslator",
+    page_title="Trainslator Glossary",
     layout="wide",
     initial_sidebar_state="collapsed",
     menu_items={
@@ -54,11 +54,8 @@ top_container.markdown(top_container_css, unsafe_allow_html=True)
 
 bottom_container = st.container()
 with bottom_container:
-    st.markdown("Glossary")
+    st.link_button("Back to Trainslator", "/")
     file_uri = st.secrets["file_uri"]
     conn = st.connection('gcs', type=FilesConnection)
     df = conn.read(file_uri, input_format="csv", ttl=600)
-    logging.info(df)
     st.dataframe(df.style.highlight_max(axis=0))
-    #for row in df.itertuples():
-     #   st.write(f"{row.en} has a :{row.fr}:")
