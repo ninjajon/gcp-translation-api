@@ -66,16 +66,16 @@ def translate_file(request_id, uploaded_file, source_language_code, target_langu
     logging.info(f"{request_id} - Transalating uploaded file...")
 
     ### check file type
-    if uploaded_file.type not in ("application/pdf"):
-        return "Your file type is not supported"
-
-    ### read document
-    document_content = uploaded_file.read()
-
-    document_input_config = {
-        "content": document_content,
-        "mime_type": "application/pdf",
-    }
+    logging.info(f"{request_id} - Uploaded File Type: {uploaded_file.type}")
+    logging.info(f"{request_id} - Uploaded File Name: {uploaded_file.name}")
+    # if uploaded_file.type not in (
+    #     "application/pdf", 
+    #     "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
+    #     "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    #     "text/vtt",
+    #     "text/plain"
+    #     ):
+    #     return "Error: Your file type is not supported"
 
     if use_glossary:
         glossary_id = st.secrets["glossary_id"]
@@ -88,6 +88,20 @@ def translate_file(request_id, uploaded_file, source_language_code, target_langu
         glossary_config = None
 
     logging.info(f"{request_id} - Glossary: {glossary_config}")
+
+    ### read document
+    document_content = uploaded_file.read()
+
+    if uploaded_file.type in ("text/vtt", "text/plain"):
+        #convert to pdf
+        
+        mime_type = "application/pdf"
+
+
+    document_input_config = {
+        "content": document_content,
+        "mime_type": uploaded_file.type
+    }
 
     response = client.translate_document(
         request={

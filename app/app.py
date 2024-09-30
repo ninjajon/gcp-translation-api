@@ -97,7 +97,7 @@ with bottom_container:
         input_language = st.selectbox("input_language",("English", "French"))
         input_container = st.container(border=False)
         text_input = input_container.text_area(".", placeholder="Type or your text here or upload a file")
-        uploaded_file = input_container.file_uploader(".", type=["pdf","docx", "pptx"], help=None)
+        uploaded_file = input_container.file_uploader(".", type=["pdf","docx","pptx","vtt","txt"], help=None)
         input_container.markdown(input_container_css, unsafe_allow_html=True)
 
     with middle_column:
@@ -137,17 +137,28 @@ with bottom_container:
                         use_glossary
                     )
                     if uploaded_file is not None:
+                        # Streamlit download button
+                        if  uploaded_file.type == "application/pdf":
+                            extension = "pdf"
+                        elif uploaded_file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                            extension = "docx"
+                        elif uploaded_file.type == "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+                            extension = "pptx"
+                        elif uploaded_file.type == "text/vtt":
+                            extension = "vtt"
+                        else:
+                            extension = "txt"
+
                         # Store the translated document in a temporary file
-                        with open('/tmp/output.pdf', 'wb') as f:
+                        with open(f'/tmp/output.{extension}', 'wb') as f:
                             f.write(output)
 
-                        # Streamlit download button
-                        with open('/tmp/output.pdf', 'rb') as f:
+                        with open(f'/tmp/output.{extension}', 'rb') as f:
                             output_container.download_button(
                                 label="Download Translated File",
                                 data=f,
-                                file_name="translated_document.pdf",
-                                mime="application/pdf"
+                                file_name=f"translated_document.{extension}",
+                                mime=uploaded_file.type
                             )
                     else:
                         output_container.text_area(".", output)
