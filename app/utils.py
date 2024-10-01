@@ -1,6 +1,8 @@
 from google.cloud import translate
 import logging
 import streamlit as st
+from fpdf import FPDF
+from google.cloud import storage
 
 logging.basicConfig(level=logging.INFO)
 
@@ -68,14 +70,6 @@ def translate_file(request_id, uploaded_file, source_language_code, target_langu
     ### check file type
     logging.info(f"{request_id} - Uploaded File Type: {uploaded_file.type}")
     logging.info(f"{request_id} - Uploaded File Name: {uploaded_file.name}")
-    # if uploaded_file.type not in (
-    #     "application/pdf", 
-    #     "application/vnd.openxmlformats-officedocument.wordprocessingml.document", 
-    #     "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-    #     "text/vtt",
-    #     "text/plain"
-    #     ):
-    #     return "Error: Your file type is not supported"
 
     if use_glossary:
         glossary_id = st.secrets["glossary_id"]
@@ -92,15 +86,34 @@ def translate_file(request_id, uploaded_file, source_language_code, target_langu
     ### read document
     document_content = uploaded_file.read()
 
-    if uploaded_file.type in ("text/vtt", "text/plain"):
-        #convert to pdf
-        
-        mime_type = "application/pdf"
 
+    project_id = "jo-vertex-ai-playground-ffyc"
+    location = "us-central1"
+    bucket_name = "jo-translation-docs"
+    input_folder_name = "input"
+    input_file_name = "KT_session_with_PwC.vtt"
+    converted_folder_name = "converted"
+    converted_file_name = "KT_session_with_PwC.pdf"
+    output_folder_name = "output"
+    output_file_name = "KT_session_with_PwC_FR.pdf"
+    source_language_code = "en"
+    target_language_code = "fr"
+
+
+    if uploaded_file.type in ("text/plain", "text/vtt"):
+        #upload to GCS
+        storage_client = storage.Client()
+        bucket = storage_client.bucket(bucket_name)
+        blob = bucket.blob(f"{converted_folder_name}/{converted_file_name}")
+        blob.upload_from_filename(temp_file_path)
+        document_content = txt_to_pdf(document_content)
+        mime_type = "application/pdf"
+    else:
+        mime_type = uploaded_file.type
 
     document_input_config = {
         "content": document_content,
-        "mime_type": uploaded_file.type
+        "mime_type": mime_type
     }
 
     response = client.translate_document(
@@ -117,3 +130,25 @@ def translate_file(request_id, uploaded_file, source_language_code, target_langu
         return response.glossary_document_translation.byte_stream_outputs[0]
     else:
         return response.document_translation.byte_stream_outputs[0]
+
+def txt_to_pdf(document_content):
+  pdf = FPDF()
+  pdf.add_page()
+  pdf.set_auto_page_break(auto=True, margin=15)
+  pdf.set_font("Arial", size=12)
+  
+  # Read the text file content
+  text_content = document_content.decode("utf-8") 
+
+  print(f"text: {text_content}")
+
+  # Add the text content to the PDF
+  pdf.multi_cell(0, 10, text_content)
+  
+  # Get the PDF output as bytearray
+  pdf_output = pdf.output(dest='S') 
+  
+  # Convert bytearray to bytes
+  pdf_bytes = bytes(pdf_output)
+  
+  return pdf_bytes  # Return the PDF as bytes
