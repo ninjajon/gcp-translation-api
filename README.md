@@ -30,6 +30,10 @@ This application aims at providing a Google Translate like application for enter
 
 - FR to EN translation
 
+### Version 0.7
+
+- Support for vtt and txt files
+
 ## Build and deploy
 
 ### Create Glossary

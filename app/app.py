@@ -27,6 +27,7 @@ with st.sidebar:
      - Version 0.4 - Add glossary option 
      - Version 0.5 - Improve glossary look 
      - Version 0.6 - FR to EN translation
+     - Version 0.7 - Support for vtt and txt files
                 """)
     st.markdown("Built with Google Cloud Translate API")
     st.markdown("Source Code: https://github.com/ninjajon/gcp-translation-api")
