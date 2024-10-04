@@ -16,7 +16,7 @@ st.set_page_config(
 )
 
 with st.sidebar:
-    st.title("Trainslator v0.5")
+    st.title("Trainslator v0.6.1")
     st.markdown("Trainslator is a corporate, private and secure translator")
     st.write("\n")
     st.markdown("""
@@ -27,6 +27,7 @@ with st.sidebar:
      - Version 0.4 - Add glossary option 
      - Version 0.5 - Improve glossary look 
      - Version 0.6 - FR to EN translation
+     - Version 0.6.1 - Buttons sizing
                 """)
     st.markdown("Built with Google Cloud Translate API")
     st.markdown("Source Code: https://github.com/ninjajon/gcp-translation-api")
@@ -96,19 +97,19 @@ with bottom_container:
     with input_column:
         input_language = st.selectbox("input_language",("English", "French"))
         input_container = st.container(border=False)
-        text_input = input_container.text_area(".", placeholder="Type or your text here or upload a file")
+        text_input = input_container.text_area(".", placeholder="Please type text to be translated or upload a file")
         uploaded_file = input_container.file_uploader(".", type=["pdf","docx", "pptx"], help=None)
         input_container.markdown(input_container_css, unsafe_allow_html=True)
 
     with middle_column:
         button_pressed = ""
         use_glossary = False
-        if st.button("Translate", type="secondary"):
+        if st.button("Translate", type="secondary", use_container_width=True):
             button_pressed = True
-        if st.button("Trainslate", type="primary"):
+        if st.button("Trainslate", type="primary", use_container_width=True):
             use_glossary = True
             button_pressed = True
-        st.link_button("See Glossary", "glossary")
+        st.link_button("See Glossary", "glossary", use_container_width=True)
 
     with output_column:
         if input_language == "English":
