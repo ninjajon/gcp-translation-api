@@ -85,11 +85,11 @@ with bottom_container:
         [data-testid="stWidgetLabel"] {
             display: none !important;
         }
-    div.row-widget.stRadio > div[role="radiogroup"] > label[data-baseweb="radio"] {
-        background-color: #f0f0f0; 
-        padding-left: 5px; /* Add left padding */
-        padding-right: 5px; /* Add right padding */
-    }
+        div.row-widget.stRadio > div[role="radiogroup"] > label[data-baseweb="radio"] {
+            background-color: #f0f0f0; 
+            padding-left: 5px; /* Add left padding */
+            padding-right: 5px; /* Add right padding */
+        }
     </style>
     '''
 
